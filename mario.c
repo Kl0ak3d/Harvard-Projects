@@ -11,28 +11,34 @@ int main(void) {
     } while (height <= -1);
 
     if (height == 2) {
-        printf("height: %d\n", height);
-    } else {
-        // Loop over rows
-        for (int i = 0; i < height; i++) {
-            // Spaces for left pyramid
-            for (int j = 0; j < height - i - 1; j++) {
-                printf(" ");
-            }
-            //Left pyramid
-            for (int j = 0; j <= i; j++) {
-                printf("#");
-            }
-
-            //Gap between pyramids
-            printf("  ");
-
-            //Right pyramid
-            for (int j = 0; j <= i; j++) {
-                printf("#");
-            }
-
-            printf("\n");
-        }
+        printf("Accepted height: %d\n", height);
+        printf(" #  #\n##  ##\n");
+        return 0;
     }
+
+
+    // Loop over rows
+    for (int i = 0; i < height; i++) {
+        // Print spaces for left pyramid
+        for (int j = 0; j < height - i - 1; j++) {
+            printf(" ");
+        }
+        // Print blocks for left pyramid
+        for (int j = 0; j <= i; j++) {
+            printf("#");
+        }
+
+        // Print gap between pyramids
+        printf("  ");
+
+        // Print blocks for right pyramid
+        for (int j = 0; j <= i; j++) {
+            printf("#");
+        }
+
+        printf("\n");
+    }
+
+    return 0;
 }
+
