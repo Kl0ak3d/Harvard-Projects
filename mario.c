@@ -11,7 +11,7 @@ int main(void) {
     } while (height <= -1);
 
     if (height == 2) {
-        printf("Accepted height: %d\n", height);
+        printf("Height: %d\n", height);
         printf(" #  #\n##  ##\n");
         return 0;
     }
