@@ -1,44 +1,44 @@
-#include <stdio.h>
 #include <cs50.h>
+#include <stdio.h>
 
-int main(void) {
-    int height;
-    do {
-        height = get_int("Height: ");
-        if (height == -1) {
-            printf("Please enter a height greater than or equal to 0.\n");
-        }
-    } while (height <= -1);
+int get_positive_int(string prompt); // function
 
-    if (height == 2) {
-        printf("Height: %d\n", height);
-        printf(" #  #\n##  ##\n");
-        return 0;
-    }
+int main(void) // value
 
+{
+    int number = get_positive_int("Height: "); // positive number
 
-    // Loop over rows
-    for (int i = 0; i < height; i++) {
-        // Print spaces for left pyramid
-        for (int j = 0; j < height - i - 1; j++) {
+    for (int height = 0; height < number; height++) //height
+    {
+        for (int spaces = number - height - 2; spaces >= 0; spaces--) // spaces
+        {
             printf(" ");
         }
-        // Print blocks for left pyramid
-        for (int j = 0; j <= i; j++) {
+
+        for (int row = 0; row <= height; row++) //left pyramid
+        {
             printf("#");
         }
 
-        // Print gap between pyramids
         printf("  ");
-
-        // Print blocks for right pyramid
-        for (int j = 0; j <= i; j++) {
+        for (int row2 = 0; row2 <= height; row2++) //right pyramid
+        {
             printf("#");
         }
 
         printf("\n");
     }
-
-    return 0;
 }
 
+int get_positive_int(string prompt) // function
+
+{
+    int number; // integer
+    do
+    {
+        number = get_int("%s", prompt); // Integer
+    }
+    
+    while (number < 1 || number > 8); // range
+    return number; //return
+}
