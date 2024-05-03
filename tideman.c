@@ -8,10 +8,10 @@
 // Max number of candidates
 #define MAX 9
 
-// preferences[i][j] is number of voters who prefer i over j
+// preferences[i][j]
 int preferences[MAX][MAX];
 
-// locked[i][j] means i is locked in over j
+// locked[i][j]
 bool locked[MAX][MAX];
 bool lock = true;
 
@@ -23,14 +23,14 @@ typedef struct
 }
 pair;
 
-// Array of candidates
+// Array
 string candidates[MAX];
 pair pairs[MAX * (MAX - 1) / 2];
 
 int pair_count;
 int candidate_count;
 
-// Function prototypes
+// Functions
 bool vote(int rank, string name, int ranks[]);
 void record_preferences(int ranks[]);
 void add_pairs(void);
@@ -41,14 +41,14 @@ void print_winner(void);
 
 int main(int argc, string argv[])
 {
-    // Check for invalid usage
+    // Check
     if (argc < 2)
     {
         printf("Usage: tideman [candidate ...]\n");
         return 1;
     }
 
-    // Populate array of candidates
+    // Populate array
     candidate_count = argc - 1;
     if (candidate_count > MAX)
     {
@@ -60,7 +60,7 @@ int main(int argc, string argv[])
         candidates[i] = argv[i + 1];
     }
 
-    // Clear graph of locked in pairs and the preferences array from garbage values
+    // Clear graph
     for (int i = 0; i < candidate_count; i++)
     {
         for (int j = 0; j < candidate_count; j++)
@@ -73,13 +73,13 @@ int main(int argc, string argv[])
     pair_count = 0;
     int voter_count = get_int("Number of voters: ");
 
-    // Query for votes
+    // Query
     for (int i = 0; i < voter_count; i++)
     {
-        // ranks[i] is voter's ith preference
+        // preference
         int ranks[candidate_count];
 
-        // Query for each rank
+        // Query
         for (int j = 0; j < candidate_count; j++)
         {
             string name = get_string("Rank %i: ", j + 1);
@@ -103,7 +103,7 @@ int main(int argc, string argv[])
     return 0;
 }
 
-// Update ranks given a new vote
+// Update ranks
 bool vote(int rank, string name, int ranks[])
 {
     for (int i = 0; i < candidate_count; i++)
@@ -117,7 +117,7 @@ bool vote(int rank, string name, int ranks[])
     return false;
 }
 
-// Update preferences given one voter's ranks
+// Update preferences
 void record_preferences(int ranks[])
 {
     for (int i = 0; i < candidate_count; i++)
@@ -129,7 +129,7 @@ void record_preferences(int ranks[])
     }
 }
 
-// Record pairs of candidates where one is preferred over the other
+// Record pairs
 void add_pairs(void)
 {
     for (int i = 0; i < candidate_count; i++)
@@ -152,17 +152,17 @@ void add_pairs(void)
     }
 }
 
-// function used for sort
+// function
 int comparator(const void *a, const void *b)
 {
     pair *ab = (pair *)a;
     pair *ba = (pair *)b;
 
-    // uses pointers to access the preferences and check how much a candidate wins over another
+    // uses pointers
     return (preferences[ba->winner][ba->loser] - preferences[ab->winner][ab->loser]);
 }
 
-// Sort pairs in decreasing order by strength of victory
+// Sort pairs
 void sort_pairs(void)
 {
     qsort(pairs, pair_count, sizeof(pair), comparator);
@@ -193,7 +193,7 @@ bool has_cycle(int winner, int loser)
     return false;
 }
 
-// Lock pairs into the candidate graph in order, without creating cycles
+// Lock pairs
 void lock_pairs(void)
 {
     //TODO
@@ -206,7 +206,7 @@ void lock_pairs(void)
     }
 }
 
-// Print the winner of the election
+// Print the winner
 void print_winner(void)
 {
     //TODO
