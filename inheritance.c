@@ -90,7 +90,62 @@ void free_family(person *p)
     free_family(p->parents[0]);
     free_family(p->parents[1]);
 
-    
+
     free(p);
 
+}
+// Print
+void print_family(person *p, int generation)
+{
+
+    if (p == NULL)
+    {
+        return;
+    }
+
+    // Print
+    for (int i = 0; i < generation * INDENT_LENGTH; i++)
+    {
+        printf(" ");
+    }
+
+    // Print
+    if (generation == 0)
+    {
+        printf("Child (Generation %i): blood type %c%c\n", generation, p->alleles[0], p->alleles[1]);
+    }
+    else if (generation == 1)
+    {
+        printf("Parent (Generation %i): blood type %c%c\n", generation, p->alleles[0], p->alleles[1]);
+    }
+    else
+    {
+        for (int i = 0; i < generation - 2; i++)
+        {
+            printf("Great-");
+        }
+        printf("Grandparent (Generation %i): blood type %c%c\n", generation, p->alleles[0], p->alleles[1]);
+    }
+
+    // Print
+    print_family(p->parents[0], generation + 1);
+    print_family(p->parents[1], generation + 1);
+}
+
+// Blood Type
+char random_allele()
+{
+    int r = rand() % 3;
+    if (r == 0)
+    {
+        return 'A';
+    }
+    else if (r == 1)
+    {
+        return 'B';
+    }
+    else
+    {
+        return 'O';
+    }
 }
