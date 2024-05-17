@@ -1,6 +1,7 @@
 from sys import argv, exit
 import csv
 
+def main():
 
 # Checks Usage
 if len(sys.argv) != 3:
@@ -43,4 +44,4 @@ with open(db_path, "r") as csvfile:
                 print(dict_list[i]['name'])
                 exit(0)print("No match")
 
-
+main()
