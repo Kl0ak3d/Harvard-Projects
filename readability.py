@@ -1,30 +1,28 @@
 from cs50 import get_string
-import re
 
-sentence = get_string("Text: ")
-sentence = sentence.split()
+def is_word_end(c): return c == " "
+def is_sentence_end(c): return c in ".!?"
+def is_letter(c): return c.isalpha()
 
-letters = 0
-words = 0
-sentences = 0
+def coleman_liau_index(letter_count, word_count, sentence_count):
+    l = 100 * letter_count / word_count
+    s = 100 * sentence_count / word_count
+    return round(0.0588 * l - 0.296 * s - 15.8)
 
-for word in sentence:
-    words += 1
+def count_text_stats(text):
+    letter_count = sum(1 for c in text if is_letter(c))
+    word_count = sum(1 for c in text if is_word_end(c)) + 1
+    sentence_count = sum(1 for c in text if is_sentence_end(c))
+    return letter_count, word_count, sentence_count
 
-    filtered_word = re.sub('[^A-Za-z0-9]+', '', word)
-    letters += len(filtered_word)
+text = get_string("Text: ")
+letter_count, word_count, sentence_count = count_text_stats(text)
 
-    sentence_delims = ['!', '?', '.']
-    if any(delim in word for delim in sentence_delims):
-        sentences += 1
-
-AVERAGE = 100 / words
-
-index = (0.0588 * letters * AVERAGE) - (0.296 * sentences * AVERAGE) - 15.8
+index = coleman_liau_index(letter_count, word_count, sentence_count)
 
 if index < 1:
     print("Before Grade 1")
 elif index > 16:
     print("Grade 16+")
 else:
-    print(f"Grade {round(index)}")
+    print("Grade", index)
