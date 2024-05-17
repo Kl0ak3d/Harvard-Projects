@@ -2,38 +2,38 @@ from sys import argv
 import csv
 
 def main():
-
-    def read_database(database):
+    def main(database, sequence):
+    # Reads the database file
     db = []
-        with open(database) as file:
+    with open(database) as file:
         reader = csv.DictReader(file)
-            for row in reader:
+        for row in reader:
             db.append(row)
-     return db
 
-def read_sequence(sequence):
+    # Reads the DNA sequence file
     with open(sequence) as txt:
-        dna = txt.read()
-    return dna
+        dna_sequence = txt.read()
 
-    # Open & Read CSV
-    with open(db_path, "r") as csvfile:
-        reader = csv.DictReader(csvfile)
-        db = list(reader)
-
-    # Open & Read sequence file
-    with open(seq_path, "r") as file:
-        sequence = file.read().strip()
-
-    # Compute repeats
+    # Computes maximum number of consecutive STRs from sequence file
+    str_patterns = ['AGATC', 'AATG', 'TATC', 'TTTTTTCT', 'TCTAG', 'GATA', 'GAAA', 'TCTG']
     max_counts = {}
-    for row in db:
-        for key, value in row.items():
-            if key != "name":
-                max_counts[key] = 0
+    for pattern in str_patterns:
+        max_counts[pattern] = compute(pattern, dna_sequence)
 
-    for key in max_counts:
-        max_counts[key] = max(sequence.count(key * max_counts[key]), max_counts[key])
+    return max_counts
+
+def compute(pattern, sequence):
+    max_count = 0
+    current_count = 0
+    pattern_len = len(pattern)
+    for i in range(len(sequence) - pattern_len + 1):
+        if sequence[i:i+pattern_len] == pattern:
+            current_count += 1
+            max_count = max(max_count, current_count)
+            i += pattern_len
+        else:
+            current_count = 0
+    return max_count
 
     # Compare data
     for row in db:
