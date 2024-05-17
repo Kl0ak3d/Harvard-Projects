@@ -1,47 +1,20 @@
-import sys
+from sys import argv
 import csv
 
 def main():
-    if len(sys.argv) != 3:
-        sys.exit("Usage: python dna.py data.csv sequence.txt")
 
-    db_path = sys.argv[1]
-    seq_path = sys.argv[2]
-
+    def read_database(database):
     db = []
-    sequence = ""
-    def find_max_strs(dna_sequence, str_patterns):
-    max_counts = {str_pattern: 0 for str_pattern in str_patterns}
+        with open(database) as file:
+        reader = csv.DictReader(file)
+            for row in reader:
+            db.append(row)
+     return db
 
-    for str_pattern in str_patterns:
-        pattern_length = len(str_pattern)
-        max_repeat_count = 0
-
-        for i in range(len(dna_sequence)):
-            repeat_count = 0
-            j = i
-
-            # Count repeats of the current STR pattern starting from position i
-            while dna_sequence[j:j + pattern_length] == str_pattern:
-                repeat_count += 1
-                j += pattern_length
-
-            # Update max repeat count if necessary
-            if repeat_count > max_repeat_count:
-                max_repeat_count = repeat_count
-
-        # Update the maximum count for this STR pattern
-        max_counts[str_pattern] = max_repeat_count
-
- AGATC = compute('AGATC', text)
-    AATG = compute('AATG', text)
-    TATC = compute('TATC', text)
-    TTTTTTCT = compute('TTTTTTCT', text)
-    TCTAG = compute('TCTAG', text)
-    GATA = compute('GATA', text)
-    GAAA = compute('GAAA', text)
-    TCTG = compute('TCTG', text)
-
+def read_sequence(sequence):
+    with open(sequence) as txt:
+        dna = txt.read()
+    return dna
 
     # Open & Read CSV
     with open(db_path, "r") as csvfile:
@@ -77,4 +50,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
