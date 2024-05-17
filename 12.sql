@@ -1,15 +1,13 @@
 -- List movies with Johnny & Helena
 SELECT title
 FROM movies
-JOIN stars
-
-ON movies.id = stars.movie_id
-JOIN people
-ON people.id = stars.person_id
-WHERE name = "Helena Bonham Carter" AND title
-IN (SELECT title FROM movies
-JOIN stars
-ON movies.id = stars.movie_id
-JOIN people O
-N people.id = stars.person_id
-WHERE name = "Johnny Depp");
+JOIN stars ON movies.id = stars.movie_id
+JOIN people ON people.id = stars.person_id
+WHERE people.name = 'Helena Bonham Carter'
+AND title IN (
+    SELECT title
+    FROM movies
+    JOIN stars ON movies.id = stars.movie_id
+    JOIN people ON people.id = stars.person_id
+    WHERE people.name = 'Johnny Depp'
+);

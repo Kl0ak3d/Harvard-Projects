@@ -1,11 +1,6 @@
 -- List people with rating of 9 or more
-ELECT name FROM people
+SELECT DISTINCT name FROM people, directors, ratings
+WHERE directors.person_id = people.id
+AND directors.movie_id = ratings.movie_id
+AND rating >= 9.0;
 
-WHERE id IN (
-SELECT DISTINCT directors.person_id
-FROM directors J
-OIN movies ON movies.id = directors.movie_id
-WHERE id
-IN (SELECT movie_id
-FROM ratings
-WHERE rating >= "9.0"))
