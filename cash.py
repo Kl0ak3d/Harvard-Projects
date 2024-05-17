@@ -1,26 +1,45 @@
-//Cash
-from cs50 import get_float
+from cs50 import get_int
 
-while True:
-    dollars = get_float("Change owed: ")
-    if dollars > 0:
-        break
+def main():
 
-coins = round(dollars * 100)
-//Count
-count = 0
-while coins > 0:
-    if coins >= 25:
-        coins -= 25
-        count += 1
-    elif coins >= 10:
-        coins -= 10
-        count += 1
-    elif coins >= 5:
-        coins -= 5
-        count += 1
+    card = get_int("Number: ")
+
+    if valid_card(card):
+        card_company(card)
+
     else:
-        coins -= 1
-        count += 1
+        print("INVALID")
 
-print(count)
+
+def valid_card(num):
+
+    sum = 0
+    for i, c in enumerate(reversed(str(num))):
+        if i % 2 == 0:
+            sum += int(c)
+        else:
+            for j in str(int(c) * 2):
+                sum += int(j)
+
+    if sum % 10 == 0:
+        return True
+    else:
+        return False
+
+
+def card_company(card):
+    num = int(str(card)[0:2])
+
+    if (num is 34 or num is 37) and len(str(card)) is 15:
+        print("AMEX")
+    elif num > 50 and num < 56 and len(str(card)) is 16:
+        print("MASTERCARD")
+    elif num >= 40 and num < 50 and (len(str(card)) is 13 or len(str(card)) is
+                                     16):
+        print("VISA")
+    else:
+        print("INVALID")
+
+
+if __name__ == "__main__":
+    main()
