@@ -12,6 +12,9 @@ with open(argv[1], "r") as inputfile:
     reader[0].remove("name")
     i = reader[0]
 # Open TxT
+with open(db_path, "r") as csvfile:
+        reader = DictReader(csvfile)
+        dict_list = list(reader)
  with open(seq_path, "r") as file:
         sequence = file.read()
 #Compute Repeats
