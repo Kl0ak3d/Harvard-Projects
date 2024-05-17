@@ -1,50 +1,54 @@
-from sys import argv, exit
 import csv
+from sys import argv, exit
 
 def main():
     # Check
     if len(argv) != 3:
-        print(f"Error: Expected 2 arguments, got {len(argv) - 1}")
+        print("Usage: python dna.py data.csv sequence.txt")
         exit(1)
 
-    # Read CSV file and extract STR patterns
-    with open(argv[1], "r") as inputfile:
-        reader = csv.reader(inputfile)
-        header = next(reader)
-        str_patterns = header[1:]
-
     # Read File
-    with open(argv[2], "r") as sequence_file:
-        dna_sequence = sequence_file.read()
+    STRs, profiles = read_database(argv[1])
 
-    # Count Repeats
-    str_counts = {pattern: count_str(pattern, dna_sequence) for pattern in str_patterns}
+    # Repeat
+    seq_str_count = {STR: find_repeats(read_sequence(argv[2]), STR) for STR in STRs}
 
-    # Read & Compare
-    with open(argv[1], "r") as inputfile:
-        reader = csv.reader(inputfile)
-        next(reader)
-    #Print
+    # Check
+    for profile in profiles:
+        if all(int(profile[STR]) == seq_str_count[STR] for STR in STRs):
+            print(profile['name'])
+            exit(0)
+
+    print("No match")
+    exit(1)
+
+def read_database(filename):
+    STRs = []
+    profiles = []
+    with open(filename, mode="r") as database:
+        reader = csv.DictReader(database)
+        STRs = reader.fieldnames[1:]
         for row in reader:
-            if row[1:] == [str_counts[pattern] for pattern in str_patterns]:
-                print(row[0])
-                return
-        print("No match")
+            profiles.append(row)
+    return STRs, profiles
 
-def count_str(pattern, sequence):
-    pattern_len = len(pattern)
-    max_count = 0
-    count = 0
-    i = 0
-    while i < len(sequence):
-        if sequence[i:i + pattern_len] == pattern:
-            count += 1
-            max_count = max(max_count, count)
-            i += pattern_len
-        else:
-            count = 0
-            i += 1
-    return max_count
+def read_sequence(filename):
+    with open(filename, mode="r") as sequence_file:
+        return sequence_file.readline()
+# Compare & Find
+def find_repeats(sequence, STR):
+    L = len(STR)
+    max_repeats = 0
+    for i in range(len(sequence)):
+        repeats = 0
+        if sequence[i: i + L] == STR:
+            repeats += 1
+            while sequence[i: i + L] == sequence[i + L: i + (2 * L)]:
+                repeats += 1
+                i += L
+        if repeats > max_repeats:
+            max_repeats = repeats
+    return max_repeats
 
 if __name__ == "__main__":
     main()
