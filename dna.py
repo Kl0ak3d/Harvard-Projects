@@ -1,52 +1,50 @@
-from sys import argv
+from sys import argv, exit
 import csv
 
 def main():
-    def main(database, sequence):
-    # Reads the database file
-    db = []
-    with open(database) as file:
-        reader = csv.DictReader(file)
+    # Check
+    if len(argv) != 3:
+        print(f"Error: Expected 2 arguments, got {len(argv) - 1}")
+        exit(1)
+
+    # Read CSV file and extract STR patterns
+    with open(argv[1], "r") as inputfile:
+        reader = csv.reader(inputfile)
+        header = next(reader)
+        str_patterns = header[1:]
+
+    # Read File
+    with open(argv[2], "r") as sequence_file:
+        dna_sequence = sequence_file.read()
+
+    # Count Repeats
+    str_counts = {pattern: count_str(pattern, dna_sequence) for pattern in str_patterns}
+
+    # Read & Compare
+    with open(argv[1], "r") as inputfile:
+        reader = csv.reader(inputfile)
+        next(reader)
+    #Print
         for row in reader:
-            db.append(row)
+            if row[1:] == [str_counts[pattern] for pattern in str_patterns]:
+                print(row[0])
+                return
+        print("No match")
 
-    # Reads the DNA sequence file
-    with open(sequence) as txt:
-        dna_sequence = txt.read()
-
-    # Computes maximum number of consecutive STRs from sequence file
-    str_patterns = ['AGATC', 'AATG', 'TATC', 'TTTTTTCT', 'TCTAG', 'GATA', 'GAAA', 'TCTG']
-    max_counts = {}
-    for pattern in str_patterns:
-        max_counts[pattern] = compute(pattern, dna_sequence)
-
-    return max_counts
-
-def compute(pattern, sequence):
-    max_count = 0
-    current_count = 0
+def count_str(pattern, sequence):
     pattern_len = len(pattern)
-    for i in range(len(sequence) - pattern_len + 1):
-        if sequence[i:i+pattern_len] == pattern:
-            current_count += 1
-            max_count = max(max_count, current_count)
+    max_count = 0
+    count = 0
+    i = 0
+    while i < len(sequence):
+        if sequence[i:i + pattern_len] == pattern:
+            count += 1
+            max_count = max(max_count, count)
             i += pattern_len
         else:
-            current_count = 0
+            count = 0
+            i += 1
     return max_count
-
-    # Compare data
-    for row in db:
-        matches = 0
-        for key, value in row.items():
-            if key != "name":
-                if int(max_counts[key]) == int(value):
-                    matches += 1
-        if matches == len(row) - 1:
-            print(row['name'])
-            return
-
-    print("No match")
 
 if __name__ == "__main__":
     main()
