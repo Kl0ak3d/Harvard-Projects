@@ -2,6 +2,11 @@ from sys import argv, exit
 import csv
 
 def main():
+database = sys.argv[1]
+sequence = sys.argv[2]
+
+db = []
+
 
 # Checks Usage
 if len(sys.argv) != 3:
