@@ -1,6 +1,5 @@
 -- List people with rating of 9 or more
-ELECT name
-FROM people
+ELECT name FROM people
 
 WHERE id IN (
 SELECT DISTINCT directors.person_id
