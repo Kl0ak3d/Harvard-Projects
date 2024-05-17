@@ -1,52 +1,48 @@
-from sys import argv, exit
+import sys
 import csv
 
 def main():
-database = sys.argv[1]
-sequence = sys.argv[2]
+    if len(sys.argv) != 3:
+        sys.exit("Usage: python dna.py data.csv sequence.txt")
 
-db = []
+    db_path = sys.argv[1]
+    seq_path = sys.argv[2]
 
+    db = []
+    sequence = ""
 
-# Checks Usage
-if len(sys.argv) != 3:
-    sys.exit("Usage: python dna.py data.csv sequence.txt")
+    # Open & Read CSV
+    with open(db_path, "r") as csvfile:
+        reader = csv.DictReader(csvfile)
+        db = list(reader)
 
-# Open & Read CSV
-with open(argv[1], "r") as inputfile:
-    reader = list(csv.reader(inputfile))
-    reader[0].remove("name")
-    i = reader[0]
-# Open TxT
-with open(db_path, "r") as csvfile:
-        reader = DictReader(csvfile)
-        dict_list = list(reader)
- with open(seq_path, "r") as file:
-        sequence = file.read()
-#Compute Repeats
-  max_counts = []    for i in range(1, len(reader.fieldnames)):
-        STR = reader.fieldnames[i]
-        max_counts.append(0)
-#Loop
- if line[strepeat] == str(sequenceRepeats[strepeat]):
-        strsMatched += 1
-        if strsMatched == len(checkSTRS):
-              matchedPerson = line['name']
-              break
-        print(matchedPerson)
-#Function
- def compute(pattern, dnaSeq):
-       if match == []:
-        myresult = 0
-        return myresult
-#Compares data
-   for i in range(len(dict_list)):
+    # Open & Read sequence file
+    with open(seq_path, "r") as file:
+        sequence = file.read().strip()
+
+    # Compute repeats
+    max_counts = {}
+    for row in db:
+        for key, value in row.items():
+            if key != "name":
+                max_counts[key] = 0
+
+    for key in max_counts:
+        max_counts[key] = max(sequence.count(key * max_counts[key]), max_counts[key])
+
+    # Compare data
+    for row in db:
         matches = 0
-        for j in range(1, len(reader.fieldnames)):
-              if int(max_counts[j - 1]) == int(dict_list[i]  [reader.fieldnames[j]]):
-                matches += 1
-            if matches == (len(reader.fieldnames) - 1):
-                print(dict_list[i]['name'])
-                exit(0)print("No match")
+        for key, value in row.items():
+            if key != "name":
+                if int(max_counts[key]) == int(value):
+                    matches += 1
+        if matches == len(row) - 1:
+            print(row['name'])
+            return
 
-main()
+    print("No match")
+
+if __name__ == "__main__":
+    main()
+
