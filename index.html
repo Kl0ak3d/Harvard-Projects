@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+    </head>
+
+    <body>
+        <div class ="jumbotron">
+            <h1>Trivia!</h1>
+        </div>
+        <div class ="container">
+            <div class ="section">
+                <h2>Part 1: Multiple Choice!</h2>
+            </div>
+
+
+            <br>
+
+
+            <h3>Which country has the highest highest Female to Male Ratio?</h3>
+            <p id="status"></p>
+            <button id="correct">Armenia</button>
+            <button id="incorrect">Australia</button>
+            <button id="incorrect">America</button>
+            <button id="incorrect">Argentina</button>
+
+            <script>
+                let correct = document.querySelector('#correct');
+                let incorrect = document.querySelectorAll('.incorrect');
+                let status = document.querySelector('#status');
+
+                correct.addEventListener('click', function() {
+                    correct.style.backgroundColor = 'green';
+                    status.textContent = "Correct!";
+                });
+
+                if (incorrect) {
+                    incorrect.forEach(function(incorrectOption) {
+                        incorrectOption.addEventListener('click', function() {
+                            incorrectOption.style.backgroundColor = 'red';
+                            status.textContent = "Incorrect!";
+                        });
+                    });
+                }
+            </script>
+
+        </div>
+        <div class ="section">
+            <h2>Part 2: Free Response!</h2>
+
+
+            <br>
+
+            <h3>What spice is also considered a hallucinogen?</h3>
+            <p id="status2"></p>
+            <form>
+                <input type="text" id="value">
+                <button>Check Answer</button>
+            </form>
+            <script>
+                document.addEventListener('submit', function(event) {
+                    let status2 = document.querySelector('#status2');
+                    let value = document.querySelector('#value');
+                    let userInput = value.value.toLowerCase();
+                    if (userInput === 'nutmeg') {
+                        value.style.backgroundColor = 'green';
+                        status2.textContent = 'Correct!';
+                    } else {
+                        value.style.backgroundColor = 'red';
+                        status2.textContent = 'Incorrect!';
+                    }
+                });
+            </script>
+
+
+    </body>
