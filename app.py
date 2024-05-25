@@ -248,7 +248,7 @@ def register():
         ):
             return apology("Password must contain characters, digits and symbols!", 403)
 
-        # Check for password to be the same
+        # Check if passwords match
         if password != confirmation:
             return apology("Passwords do not match!", 400)
 
@@ -278,6 +278,7 @@ def register():
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("register.html")
+
 
 
 
