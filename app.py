@@ -265,14 +265,16 @@ def register():
             hashed_password,
         )
 
-        # Remember which user has logged in
+        # Log in the user
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         session["user_id"] = rows[0]["id"]
 
+        # Redirect to portfolio page
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("register.html")
+
 
 
 @app.route("/sell", methods=["GET", "POST"])
