@@ -96,4 +96,4 @@ def check_password(first_password, second_password):
     """Checks the passwords to be a match. Returns a message error if they do not match."""
 
     if not check_password_hash(first_password, second_password):
-        return apology("Passwords do not match!", code=401)
+        return apology("Passwords do not match!", code=400)
