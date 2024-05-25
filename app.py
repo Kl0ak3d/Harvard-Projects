@@ -277,8 +277,8 @@ def register():
         # Redirect to portfolio page
         return redirect(url_for("index"))
 
-        # User reached route via GET (as by clicking a link or via redirect)
-        return render_template("register.html")
+    # User reached route via GET (as by clicking a link or via redirect)
+    return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
