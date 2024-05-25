@@ -261,7 +261,7 @@ def register():
         # Check if username already exists
         if db.execute("SELECT * FROM users WHERE username = ?", username):
             return apology("Username already taken!", 400)
-        
+
 
         # Hash password
         hashed_password = generate_password_hash(password)
@@ -277,7 +277,7 @@ def register():
         session["user_id"] = rows[0]["id"]
 
         # Redirect to portfolio page
-        return redirect("/")
+        return redirect(url_for("index")) 
 
 
     # User reached route via GET (as by clicking a link or via redirect)
