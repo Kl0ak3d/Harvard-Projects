@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deposit Funds</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h1 class="mb-3">Deposit Funds</h1>
+        <form action="/deposit" method="post">
+            <div class="mb-3">
+                <label for="password" class="form-label fw-bold">Confirm Password</label>
+                <input type="password" class="form-control mb-3" id="password" name="password" placeholder="Confirm Password" minlength="1" required>
+            </div>
+            <div class="mb-3">
+                <label for="sum" class="form-label fw-bold">Amount ($)</label>
+                <input type="number" class="form-control mb-3" id="sum" name="sum" placeholder="Amount ($)" min="10" step="10" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Deposit</button>
+        </form>
+    </div>
+
+</body>
+
+</html>
