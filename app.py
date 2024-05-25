@@ -29,18 +29,15 @@ if not os.environ.get("API_KEY"):
 
 @app.after_request
 def after_request(response):
-
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
-
     return response
 
 
 @app.route("/")
 @login_required
 def index():
-
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM portfolios WHERE user_id = ?", user_id)
     cash_left = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
@@ -145,10 +142,8 @@ def buy_stock():
 @app.route("/history")
 @login_required
 def history():
-
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM history WHERE user_id = ?", user_id)
-
     return render_template("history.html", portfolio=portfolio)
 
 
@@ -232,7 +227,7 @@ def register():
         confirmation = request.form.get("confirmation")
 
         # Check for empty fields
-        if any(not field for field in [username, password, confirmation]):
+        if not all([username, password, confirmation]):
             return apology("Fields cannot be empty!")
 
         # Ensure username is at least 4 characters long
