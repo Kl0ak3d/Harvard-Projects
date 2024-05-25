@@ -261,8 +261,7 @@ def register():
         # Check if username already exists
         if db.execute("SELECT * FROM users WHERE username = ?", username):
             return apology("Username already taken!", 400)
-        if not db.execute("SELECT symbol FROM purch WHERE user_id = ?", session["user_id"]):
-            return apology("no stocks in portfolio", 400)
+        
 
         # Hash password
         hashed_password = generate_password_hash(password)
