@@ -1,7 +1,6 @@
 """
 https://cs50.harvard.edu/x/2023/psets/9/finance/
 """
-
 import re
 import os
 
@@ -236,7 +235,7 @@ def quote():
 def register():
     """Register user."""
 
-     # User reached route via POST (as by submitting a form via POST)
+    # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -374,16 +373,17 @@ def sell():
 @login_required
 def deposit():
     """Deposit funds to account."""
-
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         user_id = session["user_id"]
-
         amount = int(request.form.get("sum"))
         account = db.execute("SELECT * FROM users WHERE id = ?", user_id)
 
-        # Ensure password is correct
-        check_password(account[0]["hash"], request.form.get("password"))
+        try:
+            # Ensure password is correct
+            check_password(account[0]["hash"], request.form.get("password"))
+        except ValueError:
+            return apology("Incorrect password!")
 
         # Add funds to account
         cash = account[0]["cash"] + amount
@@ -404,12 +404,14 @@ def withdraw():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         user_id = session["user_id"]
-
         amount = int(request.form.get("sum"))
         account = db.execute("SELECT * FROM users WHERE id = ?", user_id)
 
-        # Ensure password is correct
-        check_password(account[0]["hash"], request.form.get("password"))
+        try:
+            # Ensure password is correct
+            check_password(account[0]["hash"], request.form.get("password"))
+        except ValueError:
+            return apology("Incorrect password!")
 
         # Ensure user cannot withdraw more than left cash
         if amount > account[0]["cash"]:
