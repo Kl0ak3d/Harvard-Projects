@@ -228,36 +228,42 @@ def register():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         # User entered username
-        if not request.form.get("username"):
+        username = request.form.get("username")
+        if not username:
             return apology("Must provide username")
 
         # User entered password
-        elif not request.form.get("password") or not request.form.get("confirmation"):
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+        if not password or not confirmation:
             return apology("Must provide password")
 
         # Confirm password matches
-        elif request.form.get("password") != request.form.get("confirmation"):
+        if password != confirmation:
             return apology("Password must match")
 
+        # Check if username already exists
+        existing_user = db.execute("SELECT * FROM users WHERE username = ?", username)
+        if existing_user:
+            return apology("Username already exists")
+
         # Hash the password
-        hashed_password = generate_password_hash(request.form.get("password"))
+        hashed_password = generate_password_hash(password)
 
         # Insert user into database
-        result = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",
-                            username=request.form.get("username"), hash=hashed_password)
+        result = db.execute("INSERT INTO users (username, hash) VALUES (?, ?)",
+                            username, hashed_password)
 
-        if not result:
-            return apology("Username already exists")
-        else:
-            # Remember user
-            session["user_id"] = result
+        # Remember user if registration is successful
+        session["user_id"] = result
 
-            # Redirect to home page
-            return redirect("/")
+        # Redirect to home page
+        return redirect("/")
 
     # User reached route via GET
     else:
         return render_template("register.html")
+
 
 
 
