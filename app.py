@@ -79,7 +79,8 @@ def index():
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
-def buy_stock():
+def buy():
+    """Buy shares of stock."""
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -105,7 +106,7 @@ def buy_stock():
         if user_cash < transaction_value + 1:
             return apology("Not enough money!", 401)
 
-        # Perform the acquisition and update database
+        # Perform the aquisition and update database
         update_user_cash = user_cash - transaction_value
         db.execute("UPDATE users SET cash = ? WHERE id = ?", update_user_cash, user_id)
 
@@ -138,10 +139,12 @@ def buy_stock():
         )
 
         flash(f"Successfully bought {shares} shares of {symbol}!")
-        return redirect("/buy")
+        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("buy.html")
+
+
 
 
 @app.route("/history")
