@@ -238,10 +238,6 @@ def register():
         # Confirm password matches
         elif request.form.get("password") != request.form.get("confirmation"):
             return apology("Password must match")
-        
-        existing_user = db.execute("SELECT * FROM users WHERE username = ?", username)
-        if existing_user:
-            return apology("Username already exists")
 
         # Hash the password
         hashed_password = generate_password_hash(request.form.get("password"))
