@@ -227,58 +227,38 @@ def register():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
+        # User entered username
+        if not request.form.get("username"):
+            return apology("Must provide username")
 
-        # Check for empty fields
-        if not all([username, password, confirmation]):
-            return apology("Fields cannot be empty!")
+        # User entered password
+        elif not request.form.get("password") or not request.form.get("confirmation"):
+            return apology("Must provide password")
 
-        # Ensure username is at least 4 characters long
-        if len(username) < 4:
-            return apology("Username must be at least 4 characters long!", 400)
+        # Confirm password matches
+        elif request.form.get("password") != request.form.get("confirmation"):
+            return apology("Password must match")
 
-        # Ensure username consists only of characters and digits
-        if not username.isalnum():
-            return apology("Username must contain only characters and digits!", 400)
+        # Hash the password
+        hashed_password = generate_password_hash(request.form.get("password"))
 
-        # Ensure password is stronger (has characters, digits, symbols)
-        if len(password) < 8:
-            return apology("Password must be at least 8 characters long!", 400)
-        if (
-            not re.search("[a-zA-Z]", password)
-            or not re.search("[0-9]", password)
-            or not re.search("[!@#$%^&*()]", password)
-        ):
-            return apology("Password must contain characters, digits, and symbols!", 400)
+        # Insert user into database
+        result = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",
+                            username=request.form.get("username"), hash=hashed_password)
 
-        # Check if passwords match
-        if password != confirmation:
-            return apology("Passwords do not match!", 400)
+        if not result:
+            return apology("Username already exists")
+        else:
+            # Remember user
+            session["user_id"] = result
 
-        # Check if username already exists
-        if db.execute("SELECT * FROM users WHERE username = ?", username):
-            return apology("Username already taken!", 400)
+            # Redirect to home page
+            return redirect("/")
 
-        # Hash password
-        hashed_password = generate_password_hash(password)
-        # Add username & hashed password in the database
-        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hashed_password)
+    # User reached route via GET
+    else:
+        return render_template("register.html")
 
-        # Log in the user
-        user = db.execute("SELECT * FROM users WHERE username = ?", username)
-        session["user_id"] = user[0]["id"]
-
-        # Remember which user has logged in
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        session["user_id"] = rows[0]["id"]
-
-        # Redirect to portfolio page
-        return redirect(url_for("index"))
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
