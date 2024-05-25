@@ -62,7 +62,7 @@ def lookup(symbol):
     # Contact API
     try:
         api_key = os.environ.get("API_KEY")
-        url = f"https://cloud.iexapis.com/stable/stock/{urllib.parse.quote_plus(symbol)}/quote?token={pk_73ddfae861424e3fb590ad59def379ca}"
+        url = f"https://api.iex.cloud/v1/data/core/quote/aapl?token=pk_73ddfae861424e3fb590ad59def379ca%22"
         response = requests.get(url)
         response.raise_for_status()
     except requests.RequestException:
