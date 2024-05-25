@@ -246,28 +246,24 @@ def register():
             or not re.search("[0-9]", password)
             or not re.search("[!@#$%^&*()]", password)
         ):
-            return apology("Password must contain characters, digits and symbols!", 403)
+            return apology("Password must contain characters, digits, and symbols!", 403)
 
         # Check if passwords match
         if password != confirmation:
             return apology("Passwords do not match!", 400)
 
-        # Make sure the name isn't registered already or the field is empty
-        if len(db.execute("SELECT * FROM users WHERE username = ?", username)) > 0:
+        # Check if username already exists
+        if db.execute("SELECT * FROM users WHERE username = ?", username):
             return apology("Username already taken!", 400)
 
         # Hash password
         hashed_password = generate_password_hash(password)
         # Add username & hashed password in the database
-        db.execute(
-            "INSERT INTO users (username, hash) VALUES (?, ?)",
-            username,
-            hashed_password,
-        )
+        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hashed_password)
 
         # Log in the user
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        session["user_id"] = rows[0]["id"]
+        user = db.execute("SELECT * FROM users WHERE username = ?", username)
+        session["user_id"] = user[0]["id"]
 
         # Redirect to portfolio page
         return redirect("/")
@@ -278,7 +274,6 @@ def register():
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("register.html")
-
 
 
 
