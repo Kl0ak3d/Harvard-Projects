@@ -27,22 +27,6 @@ from cs50 import SQL
 # Create an instance of the SQL class, connecting to your SQLite database
 db = SQL("sqlite:///finance.db")
 
-# Execute the SQL command to create the portfolios table
-db.execute("""
-CREATE TABLE portfolios (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    name TEXT NOT NULL,
-    symbol TEXT NOT NULL,
-    shares INTEGER NOT NULL,
-    paid_price NUMERIC NOT NULL,
-    current_price NUMERIC NOT NULL,
-    date DATETIME NOT NULL,
-    stock_value NUMERIC NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-)
-""")
-
 
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
