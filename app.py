@@ -271,12 +271,13 @@ def register():
         user = db.execute("SELECT * FROM users WHERE username = ?", username)
         session["user_id"] = user[0]["id"]
 
+        # Remember which user has logged in
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        session["user_id"] = rows[0]["id"]
+
         # Redirect to portfolio page
         return redirect("/")
 
-    # Check if user is already logged in
-    if "user_id" in session:
-        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("register.html")
