@@ -236,7 +236,7 @@ def quote():
 def register():
     """Register user."""
 
-    # User reached route via POST (as by submitting a form via POST)
+     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
