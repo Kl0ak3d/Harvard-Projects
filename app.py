@@ -30,7 +30,6 @@ if not os.environ.get("API_KEY"):
 @app.after_request
 def after_request(response):
 
-
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
@@ -41,7 +40,6 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-
 
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM portfolios WHERE user_id = ?", user_id)
@@ -80,7 +78,6 @@ def index():
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy_stock():
-
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -149,7 +146,6 @@ def buy_stock():
 @login_required
 def history():
 
-
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM history WHERE user_id = ?", user_id)
 
@@ -158,7 +154,6 @@ def history():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
 
     # Forget any user_id
     session.clear()
@@ -197,7 +192,6 @@ def login():
 @app.route("/logout")
 def logout():
 
-
     # Forget any user_id
     session.clear()
 
@@ -208,7 +202,6 @@ def logout():
 @app.route("/quote", methods=["GET", "POST"])
 @login_required
 def quote():
-
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -230,7 +223,7 @@ def quote():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-
+    """Register user."""
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -244,21 +237,21 @@ def register():
 
         # Ensure username is at least 4 characters long
         if len(username) < 4:
-            return apology("Username must be at least 4 characters long!", 403)
+            return apology("Username must be at least 4 characters long!", 400)
 
         # Ensure username consists only of characters and digits
         if not username.isalnum():
-            return apology("Username must contain only characters and digits!", 403)
+            return apology("Username must contain only characters and digits!", 400)
 
         # Ensure password is stronger (has characters, digits, symbols)
         if len(password) < 8:
-            return apology("Password must be at least 8 characters long!", 403)
+            return apology("Password must be at least 8 characters long!", 400)
         if (
             not re.search("[a-zA-Z]", password)
             or not re.search("[0-9]", password)
             or not re.search("[!@#$%^&*()]", password)
         ):
-            return apology("Password must contain characters, digits and symbols!", 403)
+            return apology("Password must contain characters, digits and symbols!", 400)
 
         # Check for password to be the same
         if password != confirmation:
@@ -290,7 +283,6 @@ def register():
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell_stock():
-
 
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM portfolios WHERE user_id = ?", user_id)
@@ -396,7 +388,6 @@ def deposit():
 @app.route("/withdraw", methods=["GET", "POST"])
 @login_required
 def withdraw():
-
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
