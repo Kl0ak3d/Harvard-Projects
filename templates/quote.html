@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quote</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h1 class="mb-3">Quote</h1>
+        <form action="/quote" method="post">
+            <div class="mb-3">
+                <label for="symbol" class="form-label fw-bold">Search for Stock Value</label>
+                <input type="text" class="form-control mb-3" id="symbol" name="symbol" placeholder="Example: AMD" minlength="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Quote</button>
+        </form>
+    </div>
+
+</body>
+
+</html>
