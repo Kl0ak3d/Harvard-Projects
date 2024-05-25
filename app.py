@@ -1,6 +1,4 @@
-"""
-https://cs50.harvard.edu/x/2023/psets/9/finance/
-"""
+
 import re
 import os
 
@@ -9,7 +7,6 @@ from flask import Flask, flash, redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import apology, login_required, lookup, usd, get_time, check_password
 from flask_session import Session
-
 
 # Configure application
 app = Flask(__name__)
@@ -32,7 +29,7 @@ if not os.environ.get("API_KEY"):
 
 @app.after_request
 def after_request(response):
-    """Ensure responses aren't cached"""
+
 
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
@@ -44,7 +41,7 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    """Show portfolio of stocks."""
+
 
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM portfolios WHERE user_id = ?", user_id)
@@ -82,8 +79,8 @@ def index():
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
-def buy():
-    """Buy shares of stock."""
+def buy_stock():
+
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -109,7 +106,7 @@ def buy():
         if user_cash < transaction_value + 1:
             return apology("Not enough money!", 401)
 
-        # Perform the aquisition and update database
+        # Perform the acquisition and update database
         update_user_cash = user_cash - transaction_value
         db.execute("UPDATE users SET cash = ? WHERE id = ?", update_user_cash, user_id)
 
@@ -142,7 +139,7 @@ def buy():
         )
 
         flash(f"Successfully bought {shares} shares of {symbol}!")
-        return redirect("/")
+        return redirect("/buy")
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("buy.html")
@@ -151,7 +148,7 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    """Show history of transactions."""
+
 
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM history WHERE user_id = ?", user_id)
@@ -161,7 +158,7 @@ def history():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """Log user in."""
+
 
     # Forget any user_id
     session.clear()
@@ -199,7 +196,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    """Log user out."""
+
 
     # Forget any user_id
     session.clear()
@@ -211,7 +208,7 @@ def logout():
 @app.route("/quote", methods=["GET", "POST"])
 @login_required
 def quote():
-    """Get stock quote."""
+
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -233,7 +230,7 @@ def quote():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """Register user."""
+
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -292,8 +289,8 @@ def register():
 
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
-def sell():
-    """Sell shares of stock."""
+def sell_stock():
+
 
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM portfolios WHERE user_id = ?", user_id)
@@ -372,7 +369,7 @@ def sell():
 @app.route("/deposit", methods=["GET", "POST"])
 @login_required
 def deposit():
-    """Deposit funds to account."""
+
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         user_id = session["user_id"]
@@ -399,7 +396,7 @@ def deposit():
 @app.route("/withdraw", methods=["GET", "POST"])
 @login_required
 def withdraw():
-    """Withdraw funds from account."""
+
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
