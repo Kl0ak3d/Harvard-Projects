@@ -22,7 +22,6 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
 # Import the SQL class from the cs50 library
-from cs50 import SQL
 
 # Create an instance of the SQL class, connecting to your SQLite database
 db = SQL("sqlite:///finance.db")
@@ -262,7 +261,6 @@ def register():
         if db.execute("SELECT * FROM users WHERE username = ?", username):
             return apology("Username already taken!", 400)
 
-
         # Hash password
         hashed_password = generate_password_hash(password)
         # Add username & hashed password in the database
@@ -277,13 +275,12 @@ def register():
         session["user_id"] = rows[0]["id"]
 
         # Redirect to portfolio page
-        return redirect(url_for("index")) 
-
+        return redirect(url_for("index"))
+    else:
+        return render_template("login.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("register.html")
-
-
 
 
 @app.route("/sell", methods=["GET", "POST"])
